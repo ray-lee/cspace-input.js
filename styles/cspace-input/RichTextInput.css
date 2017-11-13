@@ -1,0 +1,51 @@
+@value inputBg, textDark, textLight, readOnlyBg, readOnlyBorder from '../colors.css';
+@value activeEdgeWidth, inputMargin from '../dimensions.css';
+
+.common {
+  border: 1px solid textLight;
+  outline-offset: -1px;
+  margin-bottom: inputMargin;
+  width: 100%;
+  margin: 0;
+  background-color: readOnlyBg;
+  color: textDark;
+}
+
+.common.enabled {
+  background-color: inputBg;
+}
+
+.normal {
+  composes: common;
+  border: 1px solid readOnlyBorder;
+  outline-offset: -1px;
+  margin-bottom: inputMargin;
+}
+
+.normal.enabled {
+  border-color: textLight;
+}
+
+.normal.enabled.focus {
+  outline: solid textDark;
+  outline-width: activeEdgeWidth;
+  position: relative;
+  z-index: 2;
+}
+
+.embedded {
+  composes: common;
+}
+
+/* Override Quill theme styles */
+
+.common :global(.ql-container) {
+  font-family: 'Open Sans', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.common :global(.ql-editor) {
+  padding: 1px 2px;
+  line-height: 18px;
+}
