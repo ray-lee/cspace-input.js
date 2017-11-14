@@ -1,14 +1,14 @@
 @value inputBg, textDark, textLight, readOnlyBg, readOnlyBorder from '../colors.css';
-@value activeEdgeWidth, inputMargin from '../dimensions.css';
+@value activeEdgeWidth, inputHeight, inputMargin from '../dimensions.css';
 
 .common {
-  border: 1px solid textLight;
-  outline-offset: -1px;
-  margin-bottom: inputMargin;
+  composes: common from './Input.css';
   width: 100%;
-  margin: 0;
-  background-color: readOnlyBg;
+  height: inputHeight;
+  line-height: 18px;
+  margin-bottom: inputMargin;
   color: textDark;
+  background-color: readOnlyBg;
 }
 
 .common.enabled {
@@ -17,24 +17,32 @@
 
 .normal {
   composes: common;
-  border: 1px solid readOnlyBorder;
+}
+
+.embedded {
+  composes: common;
+}
+
+.common :global(.ql-editor) {
   outline-offset: -1px;
-  margin-bottom: inputMargin;
+  padding: 2px 2px 1px 2px;
+  line-height: 18px;
+  margin: 0;
 }
 
-.normal.enabled {
-  border-color: textLight;
-}
-
-.normal.enabled.focus {
+.common :global(.ql-editor):focus {
   outline: solid textDark;
   outline-width: activeEdgeWidth;
   position: relative;
   z-index: 2;
 }
 
-.embedded {
-  composes: common;
+.normal :global(.ql-editor) {
+  border: 1px solid readOnlyBorder;
+}
+
+.normal.enabled :global(.ql-editor) {
+  border-color: textLight;
 }
 
 /* Override Quill theme styles */
@@ -45,7 +53,7 @@
   font-weight: 400;
 }
 
-.common :global(.ql-editor) {
-  padding: 1px 2px;
-  line-height: 18px;
+.common :global(.ql-bubble) :global(.ql-tooltip) {
+  border-radius: 0;
+  z-index: 3;
 }

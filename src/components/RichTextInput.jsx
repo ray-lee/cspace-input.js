@@ -2,17 +2,17 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactQuill, { Quill } from 'react-quill';
 import classNames from 'classnames';
-import { pathPropType } from '../helpers/pathHelpers';
+import { getPath, pathPropType } from '../helpers/pathHelpers';
 import styles from '../../styles/cspace-input/RichTextInput.css';
 import '!style-loader!css-loader!react-quill/dist/quill.bubble.css';
 
-// Change bold rendering to <b> (instead of <strong>).
+// Change bold rendering to <b> instead of <strong>, since it is more semantically neutral.
 
 const Bold = Quill.import('formats/bold');
 Bold.tagName = 'B';
 Quill.register(Bold, true);
 
-// Change italic rendering to <i> (instead of <em>).
+// Change italic rendering to <i> instead of <em>, since it is more semantically neutral.
 
 const Italic = Quill.import('formats/italic');
 Italic.tagName = 'I';
@@ -26,6 +26,7 @@ const propTypes = {
   subpath: pathPropType,
   value: PropTypes.string,
   readOnly: PropTypes.bool,
+  onCommit: PropTypes.func,
 };
 
 export default class RichTextInput extends Component {
@@ -34,6 +35,7 @@ export default class RichTextInput extends Component {
 
     // Set the allowed formats.
     // TODO: Make this a prop.
+    // TODO: Add paragraph formatting (e.g. lists) when multiline is true?
 
     this.formats = ['bold', 'italic', 'underline', 'script'];
 
@@ -44,22 +46,20 @@ export default class RichTextInput extends Component {
       keyboard: {
         bindings: {
           enter: {
+            // Only allow newlines in content if multiline prop is true.
+
             key: 13,
             handler: () => {
+              this.commit();
+
               return this.props.multiline;
-            },
+            }
           },
           tab: {
             // Don't allow tabs in the content, just do the browser default of focusing the next
             // field.
 
-            handler: () => {
-              this.setState({
-                isFocused: false,
-              });
-
-              return true;
-            },
+            handler: () => true,
           },
         },
       },
@@ -75,36 +75,40 @@ export default class RichTextInput extends Component {
 
     this.handleBlur = this.handleBlur.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleFocus = this.handleFocus.bind(this);
-    // this.handleRef = this.handleRef.bind(this);
+  }
+
+  commit() {
+    const {
+      onCommit,
+      value: prevValue,
+    } = this.props;
+
+    if (onCommit) {
+      const {
+        value,
+      } = this.state;
+
+      // If there is only a single paragraph, remove the <p></p> wrapper.
+
+      let normalizedValue = (value && value.indexOf('<p>', 1) < 0)
+        ? value.replace(/^<p>|<\/p>$/g, '')
+        : value;
+
+      if (normalizedValue !== prevValue) {
+        onCommit(getPath(this.props), normalizedValue);
+      }
+    }
   }
 
   handleBlur() {
-    console.log("blur");
-    this.setState({
-      isFocused: false,
-    });
+    this.commit();
   }
 
   handleChange(value) {
-    console.log(value);
     this.setState({
       value,
     });
   }
-
-  handleFocus() {
-    console.log("focus");
-    if (!this.props.readOnly) {
-      this.setState({
-        isFocused: true,
-      });
-    }
-  }
-
-  // handleRef(ref) {
-  //   this.quill = ref;
-  // }
 
   render() {
     const {
@@ -119,15 +123,15 @@ export default class RichTextInput extends Component {
     } = this.props;
 
     const {
-      isFocused,
       value,
     } = this.state;
+
+    const normalizedValue = value || '';
 
     const className = classNames({
       [styles.embedded]: embedded,
       [styles.normal]: !embedded,
       [styles.enabled]: !readOnly,
-      [styles.focus]: isFocused,
     });
 
     return (
@@ -136,12 +140,10 @@ export default class RichTextInput extends Component {
         formats={this.formats}
         modules={this.modules}
         readOnly={readOnly}
-        tabIndex={readOnly ? null : 0}
         theme="bubble"
-        value={value}
+        value={normalizedValue}
         onChange={this.handleChange}
         onBlur={this.handleBlur}
-        onFocus={this.handleFocus}
       />
     );
   }

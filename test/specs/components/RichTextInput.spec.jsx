@@ -12,19 +12,23 @@ describe('RichTextInput', function suite() {
     this.container = createTestContainer(this);
   });
 
+  const handleCommit = (value) => {
+    console.log(value);
+  };
+
   it('should be considered an input by isInput()', function test() {
     isInput(<RichTextInput />).should.equal(true);
   });
 
   it('should render as a Quill editor', function test() {
-    render(<RichTextInput value="Hello <i>world</i>" />, this.container);
+    render(<RichTextInput value="Hello <i>world</i>" onCommit={handleCommit} />, this.container);
 
     // this.container.firstElementChild.nodeName.should.equal('INPUT');
     // this.container.firstElementChild.type.should.equal('text');
   });
 
   it('when multiline is true', function test() {
-    render(<RichTextInput multiline value="Hello <i>world</i>" />, this.container);
+    render(<RichTextInput multiline value="Hello <i>world</i>" onCommit={handleCommit} />, this.container);
 
     // this.container.firstElementChild.nodeName.should.equal('INPUT');
     // this.container.firstElementChild.type.should.equal('text');
