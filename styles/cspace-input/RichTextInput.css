@@ -45,20 +45,25 @@
   border-color: textLight;
 }
 
-.common :global(.ql-container) {
+.common :global(.ql-container.ql-snow) {
+  border: none;
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 14px;
   font-weight: 400;
 }
 
-.common :global(.ql-toolbar) {
+.common :global(.ql-toolbar.ql-snow) {
+  display: none;
   position: absolute;
-  top: -45px;
+  top: -41px;
   z-index: 3;
+  border: none;
   background-color: white;
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
 }
 
-/* .common :global(.ql-bubble) :global(.ql-tooltip) {
-  border-radius: 0;
-  z-index: 3;
-} */
+/* FIXME: Edge does not yet support :focus-within */
+
+.common:focus-within :global(.ql-toolbar.ql-snow) {
+  display: block;
+}
