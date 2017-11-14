@@ -3,6 +3,7 @@
 
 .common {
   composes: common from './Input.css';
+  position: relative;
   width: 100%;
   height: inputHeight;
   line-height: 18px;
@@ -33,7 +34,6 @@
 .common :global(.ql-editor):focus {
   outline: solid textDark;
   outline-width: activeEdgeWidth;
-  position: relative;
   z-index: 2;
 }
 
@@ -45,15 +45,20 @@
   border-color: textLight;
 }
 
-/* Override Quill theme styles */
-
 .common :global(.ql-container) {
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 14px;
   font-weight: 400;
 }
 
-.common :global(.ql-bubble) :global(.ql-tooltip) {
+.common :global(.ql-toolbar) {
+  position: absolute;
+  top: -45px;
+  z-index: 3;
+  background-color: white;
+}
+
+/* .common :global(.ql-bubble) :global(.ql-tooltip) {
   border-radius: 0;
   z-index: 3;
-}
+} */

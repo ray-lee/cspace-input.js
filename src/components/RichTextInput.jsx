@@ -4,7 +4,7 @@ import ReactQuill, { Quill } from 'react-quill';
 import classNames from 'classnames';
 import { getPath, pathPropType } from '../helpers/pathHelpers';
 import styles from '../../styles/cspace-input/RichTextInput.css';
-import '!style-loader!css-loader!react-quill/dist/quill.bubble.css';
+import '!style-loader!css-loader!react-quill/dist/quill.snow.css';
 
 // Change bold rendering to <b> instead of <strong>, since it is more semantically neutral.
 
@@ -140,7 +140,7 @@ export default class RichTextInput extends Component {
         formats={this.formats}
         modules={this.modules}
         readOnly={readOnly}
-        theme="bubble"
+        theme="snow"
         value={normalizedValue}
         onChange={this.handleChange}
         onBlur={this.handleBlur}
