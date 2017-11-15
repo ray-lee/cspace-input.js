@@ -20,22 +20,26 @@
   composes: common;
 }
 
+.normal.multiline {
+  height: 88px;
+}
+
 .embedded {
   composes: common;
 }
 
-.common :global(.ql-editor) {
+/* .common :global(.ql-editor) {
   outline-offset: -1px;
   padding: 2px 2px 1px 2px;
   line-height: 18px;
   margin: 0;
-}
+} */
 
-.common :global(.ql-editor):focus {
+/* .common :global(.ql-editor):focus {
   outline: solid textDark;
   outline-width: activeEdgeWidth;
   z-index: 2;
-}
+} */
 
 .normal :global(.ql-editor) {
   border: 1px solid readOnlyBorder;
@@ -45,25 +49,25 @@
   border-color: textLight;
 }
 
-.common :global(.ql-container.ql-snow) {
+/* .common :global(.ql-snow.ql-container) {
   border: none;
   font-family: 'Open Sans', Arial, sans-serif;
   font-size: 14px;
   font-weight: 400;
-}
+} */
 
-.common :global(.ql-toolbar.ql-snow) {
-  display: none;
+/* .common :global(.ql-snow.ql-toolbar) {
+  display: block;
   position: absolute;
   top: -41px;
   z-index: 3;
   border: none;
   background-color: white;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
-}
+} */
 
 /* FIXME: Edge does not yet support :focus-within */
 
-.common:focus-within :global(.ql-toolbar.ql-snow) {
+.common:focus-within :global(.ql-toolbar) {
   display: block;
 }

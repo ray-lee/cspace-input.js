@@ -4,7 +4,10 @@ import ReactQuill, { Quill } from 'react-quill';
 import classNames from 'classnames';
 import { getPath, pathPropType } from '../helpers/pathHelpers';
 import styles from '../../styles/cspace-input/RichTextInput.css';
-import '!style-loader!css-loader!react-quill/dist/quill.snow.css';
+/* eslint-disable import/imports-first, import/no-unresolved */
+import '!style-loader!css-loader!../../styles/quill/cspace.css';
+import '!style-loader!css-loader!react-quill/dist/quill.core.css';
+/* eslint-enable import/imports-first, import/no-unresolved */
 
 // Change bold rendering to <b> instead of <strong>, since it is more semantically neutral.
 
@@ -21,9 +24,11 @@ Quill.register(Italic, true);
 const propTypes = {
   embedded: PropTypes.bool,
   multiline: PropTypes.bool,
+  /* eslint-disable react/no-unused-prop-types */
   name: PropTypes.string,
   parentPath: pathPropType,
   subpath: pathPropType,
+  /* eslint-enable react/no-unused-prop-types */
   value: PropTypes.string,
   readOnly: PropTypes.bool,
   onCommit: PropTypes.func,
@@ -53,7 +58,7 @@ export default class RichTextInput extends Component {
               this.commit();
 
               return this.props.multiline;
-            }
+            },
           },
           tab: {
             // Don't allow tabs in the content, just do the browser default of focusing the next
@@ -63,11 +68,11 @@ export default class RichTextInput extends Component {
           },
         },
       },
-      toolbar: [
-        ['bold', 'italic', 'underline', { 'script': 'sub'}, { 'script': 'super' }],
-        ['clean'],
-      ],
+      toolbar: ['bold', 'italic', 'underline', { script: 'sub' }, { script: 'super' }, 'clean'],
     };
+
+    // TODO: Make a custom HTML toolbar for accessibility:
+    // https://github.com/zenoamaro/react-quill#html-toolbar
 
     this.state = {
       value: this.props.value,
@@ -90,7 +95,7 @@ export default class RichTextInput extends Component {
 
       // If there is only a single paragraph, remove the <p></p> wrapper.
 
-      let normalizedValue = (value && value.indexOf('<p>', 1) < 0)
+      const normalizedValue = (value && value.indexOf('<p>', 1) < 0)
         ? value.replace(/^<p>|<\/p>$/g, '')
         : value;
 
@@ -113,13 +118,8 @@ export default class RichTextInput extends Component {
   render() {
     const {
       embedded,
-      name,
+      multiline,
       readOnly,
-      /* eslint-disable no-unused-vars */
-      parentPath,
-      subpath,
-      /* eslint-enable no-unused-vars */
-      ...remainingProps
     } = this.props;
 
     const {
@@ -132,6 +132,7 @@ export default class RichTextInput extends Component {
       [styles.embedded]: embedded,
       [styles.normal]: !embedded,
       [styles.enabled]: !readOnly,
+      [styles.multiline]: multiline,
     });
 
     return (
