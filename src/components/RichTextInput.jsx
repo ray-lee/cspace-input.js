@@ -57,7 +57,7 @@ export default class RichTextInput extends Component {
             handler: () => {
               this.commit();
 
-              return this.props.multiline;
+              return !!this.props.multiline;
             },
           },
           tab: {
