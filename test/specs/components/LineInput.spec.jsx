@@ -109,6 +109,14 @@ describe('LineInput', function suite() {
     expect(inputApi).to.equal(null);
   });
 
+  it('should render a link alongside the input if link is supplied', function test() {
+    const value = 'Test';
+
+    render(<LineInput value={value} link="http://collectionspace.org" />, this.container);
+
+    // this.container.firstElementChild.value.should.equal(value);
+  });
+
   it('should become focused when the focus api is called', function test() {
     let inputApi = null;
 

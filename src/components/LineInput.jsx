@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { pathPropType } from '../helpers/pathHelpers';
 import styles from '../../styles/cspace-input/LineInput.css';
+import wrapperStyles from '../../styles/cspace-input/LineInputWrapper.css';
 
 const propTypes = {
   asText: PropTypes.bool,
@@ -9,6 +10,7 @@ const propTypes = {
   name: PropTypes.string,
   parentPath: pathPropType,
   subpath: pathPropType,
+  link: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
   value: PropTypes.string,
   readOnly: PropTypes.bool,
   api: PropTypes.func,
@@ -63,6 +65,7 @@ export default class LineInput extends Component {
       embedded,
       readOnly,
       value,
+      link,
       /* eslint-disable no-unused-vars */
       parentPath,
       subpath,
@@ -80,7 +83,7 @@ export default class LineInput extends Component {
       );
     }
 
-    return (
+    const input = (
       <input
         {...remainingProps}
         className={className}
@@ -90,6 +93,21 @@ export default class LineInput extends Component {
         type="text"
         value={normalizedValue}
       />
+    )
+
+    if (!link) {
+      return input;
+    }
+
+    const renderedLink = (typeof link === 'string')
+      ? <a href={link}>Go</a>
+      : link;
+
+    return (
+      <div className={wrapperStyles.common}>
+        {input}
+        {renderedLink}
+      </div>
     );
   }
 }
